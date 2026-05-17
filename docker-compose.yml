@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=tajnehaslo
+      - POSTGRES_DB=mojedane
+
+  app1:
+    build: ./app
+    environment:
+      - STUDENT_ID=185125_SERWER_A
+      - DATABASE_URL=postgres://admin:tajnehaslo@db:5432/mojedane
+    depends_on:
+      - db
+
+  app2:
+    build: ./app
+    environment:
+      - STUDENT_ID=123456_SERWER_B
+      - DATABASE_URL=postgres://admin:tajnehaslo@db:5432/mojedane
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - app1
+      - app2
