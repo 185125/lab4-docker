@@ -1,1 +1,3 @@
 Zmiana z galezi MASTER
+Zmiana z galezi DEV
+
